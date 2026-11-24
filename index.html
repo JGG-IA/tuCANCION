@@ -200,17 +200,6 @@ canvas#viz{display:block;width:100%;height:84px;margin-block:18px 6px}
 @media (max-width:540px){.lists{grid-template-columns:1fr}.pl.big{grid-column:auto}}
 
 
-/* pasos */
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px 24px;margin-top:52px;counter-reset:s}
-.step{position:relative;padding:28px 4px 24px;border-top:2px solid var(--line);transition:border-color .3s}
-.step:hover{border-color:var(--pink)}
-.step::before{counter-increment:s;content:"0" counter(s);font:900 4rem/1 var(--f-display);background:var(--glow);-webkit-background-clip:text;background-clip:text;color:transparent;display:block;margin-bottom:12px;transition:transform .4s}
-.step:hover::before{transform:translateX(6px) rotate(-4deg)}
-.step h3{font-size:1.2rem;font-weight:800;margin-bottom:10px}
-.step p{color:var(--muted);margin:0;font-size:.98rem}
-@media (max-width:980px){.steps{grid-template-columns:1fr 1fr}}
-@media (max-width:540px){.steps{grid-template-columns:1fr}}
-
 /* géneros */
 .genres-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:20px}
 .chips{display:flex;flex-wrap:wrap;gap:12px;margin-top:40px}
@@ -327,6 +316,57 @@ footer img{height:22px;width:auto}
 @media (max-width:900px){.listen{grid-template-columns:1fr}}
 @media (max-width:540px){.listen .lists{grid-template-columns:1fr}}
 @media (min-width:1100px){ section[data-rail] > .wrap{padding-right:calc(var(--gut-r) + 290px)} }
+/* proceso en 4 pasos */
+.process{list-style:none;margin:52px 0 0;padding:0;position:relative;display:grid;gap:22px;--fill:0}
+.process::before,.process::after{content:"";position:absolute;left:27px;top:28px;bottom:28px;width:3px;border-radius:3px}
+.process::before{background:var(--line)}
+.process::after{background:var(--glow);transform-origin:top;transform:scaleY(var(--fill))}
+.pstep{position:relative;display:grid;grid-template-columns:58px minmax(0,1.15fr) minmax(0,.85fr);gap:18px 26px;align-items:start}
+.pnum{position:relative;z-index:1;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font:900 1.5rem/1 var(--f-display);background:var(--ink);border:2px solid var(--line);color:var(--muted);transition:background .4s,color .4s,border-color .4s,box-shadow .4s}
+.pstep.on .pnum{background:var(--glow);color:var(--ink);border-color:transparent;box-shadow:0 0 0 6px color-mix(in srgb,var(--pink) 18%,transparent)}
+.pbody{padding-top:4px;min-width:0}
+.pstage{display:block;font:600 .74rem var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--lilac);margin-bottom:8px}
+.pbody h3{font-size:clamp(1.35rem,2.4vw,1.7rem);font-weight:900;margin-bottom:10px}
+.pbody>p{margin:0;color:var(--muted);max-width:52ch}
+.roles{margin:16px 0 0;display:grid;gap:8px}
+.roles div{display:grid;grid-template-columns:86px 1fr;gap:12px;align-items:baseline;padding:10px 14px;border-radius:14px;background:var(--ink-2);border:1px solid var(--line)}
+.roles dt{font:800 .78rem var(--f-display);text-transform:uppercase;letter-spacing:.06em;color:var(--pink)}
+.roles dd{margin:0;font-size:.95rem;color:var(--paper)}
+.chat{position:relative;display:grid;gap:8px;padding:18px 16px 16px;border-radius:22px;background:#120A15;border:1px solid var(--line);min-width:0}
+.chat-tag{position:absolute;top:-10px;right:14px;font:600 .64rem var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--ink);border:1px solid var(--line);padding:3px 8px;border-radius:999px}
+.b{margin:0;max-width:88%;padding:9px 13px;border-radius:16px;font-size:.93rem;line-height:1.4;overflow-wrap:anywhere}
+.b.me{justify-self:end;background:#3B6B4F;color:#F1FFF5;border-bottom-right-radius:5px}
+.b.them{justify-self:start;background:var(--ink-3);color:var(--paper);border-bottom-left-radius:5px}
+.b.audio{display:flex;align-items:center;gap:10px;min-width:190px}
+.b.audio .ap{width:0;height:0;border-left:11px solid var(--pink);border-top:7px solid transparent;border-bottom:7px solid transparent}
+.b.audio .aw{flex:1;height:16px;border-radius:3px;background:repeating-linear-gradient(90deg,var(--lilac) 0 3px,transparent 3px 6px);opacity:.75}
+.b.audio span:last-child{font:600 .75rem var(--f-mono);color:var(--muted)}
+.b.file{display:flex;align-items:center;gap:10px;font:600 .85rem var(--f-mono)}
+.b.file .fi{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:var(--plum);color:var(--paper);font-size:1rem}
+.prep{margin-top:44px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;padding:28px;border-radius:24px;background:linear-gradient(150deg,var(--ink-3),var(--ink-2));border:1px solid var(--line)}
+.prep>div{min-width:0;flex:1 1 380px}
+.prep h3{font-size:1.3rem;font-weight:900;margin-bottom:14px}
+.prep ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 24px}
+.prep li{display:grid;grid-template-columns:22px 1fr;gap:8px;color:var(--muted);font-size:.97rem}
+.prep li::before{content:"✓";color:var(--pink);font-weight:800}
+.hero-steps{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-top:30px;padding:0;list-style:none;font:700 .86rem var(--f-display)}
+.hero-steps li{display:flex;align-items:center;gap:8px;color:var(--paper)}
+.hero-steps li b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--glow);color:var(--ink);font-size:.8rem}
+.hero-steps li+li::before{content:"";width:18px;height:2px;background:var(--line);margin-right:2px}
+.hero-steps a{color:var(--lilac);font:600 .82rem var(--f-body);text-decoration:underline;text-underline-offset:3px}
+@media (max-width:900px){
+  .pstep{grid-template-columns:46px minmax(0,1fr)}
+  .pnum{width:46px;height:46px;font-size:1.2rem}
+  .process::before,.process::after{left:21px}
+  .chat{grid-column:2}
+  .prep ul{grid-template-columns:1fr}
+}
+@media (max-width:540px){ .roles div{grid-template-columns:1fr;gap:2px}
+  .hero-steps{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .hero-steps li+li::before{display:none}
+  .hero-steps li:last-child{grid-column:1/-1} }
+@media (prefers-reduced-motion:reduce){ .process{--fill:1} }
+
 @supports (animation-timeline:view()){
   .rise{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
 }
@@ -354,9 +394,9 @@ footer img{height:22px;width:auto}
   <div class="wrap nav">
     <a class="logo" href="#inicio" aria-label="tuCANCIÓN, inicio"><img src="assets/logo-blanco.webp" alt="tuCANCIÓN" width="900" height="148"></a>
     <ul>
+      <li><a href="#como">Cómo funciona</a></li>
       <li><a href="#ocasiones">Lo que hacemos</a></li>
       <li><a href="#escucha">Escucha</a></li>
-      <li><a href="#como">Cómo lo hacemos</a></li>
       <li><a href="#marcas">Marcas</a></li>
       <li><a href="#precios">Planes</a></li>
     </ul>
@@ -379,11 +419,13 @@ footer img{height:22px;width:auto}
         </a>
         <a class="btn btn-ghost" href="#escucha">Escuchar canciones</a>
       </div>
-      <div class="facts">
-        <span>Desde <b>50 dólares</b></span>
-        <span>Letra <b>100% personalizada</b></span>
-        <span>Tarjeta con <b>QR</b> que la reproduce</span>
-      </div>
+      <ol class="hero-steps" aria-label="El proceso en 4 pasos">
+        <li><b>1</b>Nos cuentas</li>
+        <li><b>2</b>Creamos</li>
+        <li><b>3</b>Ajustamos</li>
+        <li><b>4</b>La recibes</li>
+        <li><a href="#como">Ver cómo funciona</a></li>
+      </ol>
     </div>
 
     <div class="hero-side">
@@ -396,6 +438,104 @@ footer img{height:22px;width:auto}
   <div class="track" id="track1"></div>
   <div class="track rev" id="track2"></div>
 </div>
+
+<section class="band" id="como" data-rail data-mood="focus">
+  <div class="wrap">
+    <div class="sec-head"><div>
+    <span class="eyebrow">Cómo funciona</span>
+    <h2 class="rise" style="margin-top:14px">Así creamos <span class="script">tu canción</span></h2>
+    </div></div>
+    <p class="lead" style="margin-top:16px">Todo pasa por WhatsApp, en 4 pasos. Tú nos cuentas la historia y nosotros hacemos el resto.</p>
+
+    <ol class="process" id="process">
+      <li class="pstep">
+        <span class="pnum" aria-hidden="true">1</span>
+        <div class="pbody">
+          <small class="pstage">Paso 1 · Tú nos cuentas</small>
+          <h3>Cuéntanos su historia</h3>
+          <p>Escríbenos por WhatsApp o llena el formulario. Hablamos de la ocasión, la persona y lo que quieres decirle.</p>
+          <dl class="roles">
+            <div><dt>Tú</dt><dd>Nos das su nombre, anécdotas, frases que no pueden faltar, el estilo musical y la voz.</dd></div>
+            <div><dt>Nosotros</dt><dd>Te hacemos las preguntas clave y te ayudamos a elegir el plan.</dd></div>
+          </dl>
+        </div>
+        <div class="chat" aria-label="Ejemplo de conversación, paso 1">
+          <span class="chat-tag">Ejemplo</span>
+          <p class="b me">Hola, quiero una canción para los 60 años de mi mamá, Rosa. Le encantan las baladas y su jardín 🌹</p>
+          <p class="b them">¡Qué lindo! Cuéntanos un recuerdo con ella que te haga sonreír.</p>
+        </div>
+      </li>
+      <li class="pstep">
+        <span class="pnum" aria-hidden="true">2</span>
+        <div class="pbody">
+          <small class="pstage">Paso 2 · Nosotros creamos</small>
+          <h3>Escribimos y componemos</h3>
+          <p>Con lo que nos contaste escribimos una letra original y le ponemos melodía en el estilo que elegiste.</p>
+          <dl class="roles">
+            <div><dt>Tú</dt><dd>Esperas, nada más.</dd></div>
+            <div><dt>Nosotros</dt><dd>Te enviamos una propuesta con la letra y la melodía.</dd></div>
+          </dl>
+        </div>
+        <div class="chat" aria-label="Ejemplo de conversación, paso 2">
+          <span class="chat-tag">Ejemplo</span>
+          <p class="b them">Aquí está la propuesta para Rosa 🎵</p>
+          <p class="b them audio"><span class="ap" aria-hidden="true"></span><span class="aw" aria-hidden="true"></span><span>0:48</span></p>
+          <p class="b me">¡Me encantó!</p>
+        </div>
+      </li>
+      <li class="pstep">
+        <span class="pnum" aria-hidden="true">3</span>
+        <div class="pbody">
+          <small class="pstage">Paso 3 · Juntos</small>
+          <h3>La ajustamos contigo</h3>
+          <p>Escuchas la propuesta y nos dices qué cambiar. La ajustamos hasta que sea exactamente lo que imaginabas.</p>
+          <dl class="roles">
+            <div><dt>Tú</dt><dd>Nos dices qué te gusta y qué quieres cambiar.</dd></div>
+            <div><dt>Nosotros</dt><dd>Hacemos los ajustes a la letra y a la música.</dd></div>
+          </dl>
+        </div>
+        <div class="chat" aria-label="Ejemplo de conversación, paso 3">
+          <span class="chat-tag">Ejemplo</span>
+          <p class="b me">¿Podemos nombrar a sus nietos en el coro?</p>
+          <p class="b them">¡Claro! Ya quedó ajustada ✅</p>
+        </div>
+      </li>
+      <li class="pstep">
+        <span class="pnum" aria-hidden="true">4</span>
+        <div class="pbody">
+          <small class="pstage">Paso 4 · Tú la regalas</small>
+          <h3>Recíbela y sorprende</h3>
+          <p>Te entregamos la canción final en digital, lista para regalar, poner en la fiesta o compartir.</p>
+          <dl class="roles">
+            <div><dt>Recibes</dt><dd><b>Especial:</b> MP3 · <b>Única:</b> MP3, MP4 y tarjeta con QR · <b>de la Vida:</b> todo lo anterior y video con fotos.</dd></div>
+          </dl>
+        </div>
+        <div class="chat" aria-label="Ejemplo de conversación, paso 4">
+          <span class="chat-tag">Ejemplo</span>
+          <p class="b them">¡Lista la canción de Rosa! 🎁</p>
+          <p class="b them file"><span class="fi" aria-hidden="true">♪</span>cancion-rosa.mp3</p>
+          <p class="b them file"><span class="fi" aria-hidden="true">▦</span>tarjeta-qr.png</p>
+          <p class="b me">¡Mañana se la doy! 🥹</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="prep rise">
+      <div>
+        <h3>Para el paso 1, ten a mano</h3>
+        <ul>
+          <li>Su nombre y cómo le dicen de cariño</li>
+          <li>La ocasión y la fecha en que la vas a regalar</li>
+          <li>2 o 3 recuerdos o anécdotas</li>
+          <li>Frases o palabras que no pueden faltar</li>
+          <li>El estilo musical y la voz (femenina, masculina o dueto)</li>
+          <li>Sus fotos, si tu plan incluye video</li>
+        </ul>
+      </div>
+      <a class="btn btn-hot" href="#pedido">Empezar el paso 1</a>
+    </div>
+  </div>
+</section>
 
 <section class="band" id="ocasiones" data-rail data-mood="curious">
   <div class="wrap">
@@ -463,24 +603,6 @@ footer img{height:22px;width:auto}
   </div>
 </section>
 
-<section class="band" id="como" data-rail data-mood="focus">
-  <div class="wrap">
-    <div class="sec-head"><div>
-    <span class="eyebrow">Cómo lo hacemos</span>
-    <h2 class="rise" style="margin-top:14px">De tu historia a <span class="script">tu canción</span></h2>
-    </div></div>
-    <div class="steps">
-      <div class="step rise"><h3>Toma la decisión</h3><p>Decide darle un toque único a ese momento especial: sorprender a alguien o inmortalizar una historia.</p></div>
-      <div class="step rise"><h3>Contáctanos</h3><p>Escríbenos al WhatsApp con tu idea inicial: la ocasión, la persona y el mensaje que quieres transmitir.</p></div>
-      <div class="step rise"><h3>Cuéntanos tu historia</h3><p>Recopilamos lo importante: emociones, anécdotas, palabras clave y todo lo que quieras que forme parte de tu canción.</p></div>
-      <div class="step rise"><h3>Elige el estilo musical</h3><p>¿Balada romántica, pop alegre, ritmo tropical o algo más? Tú decides el tono de tu canción.</p></div>
-      <div class="step rise"><h3>Creamos una propuesta</h3><p>Te enviamos un borrador con la letra y la melodía para confirmar que capturamos lo que imaginas.</p></div>
-      <div class="step rise"><h3>Revisamos juntos</h3><p>Hacemos los ajustes necesarios según tus comentarios, hasta que sea perfecta para ti.</p></div>
-      <div class="step rise"><h3>Recibe tu canción</h3><p>Te la entregamos en formato digital, lista para disfrutar, compartir y guardar para siempre.</p></div>
-      <div class="step rise"><h3>Disfruta el momento</h3><p>Entrégala a esa persona especial, ponla en tu evento o simplemente vive la emoción de escucharla.</p></div>
-    </div>
-  </div>
-</section>
 
 <section class="band" id="generos" data-rail data-mood="groove" style="background:var(--ink-2);border-block:1px solid var(--line)">
   <div class="wrap">
@@ -539,9 +661,9 @@ footer img{height:22px;width:auto}
 <section class="band" id="pedido" data-rail data-mood="excited" style="background:var(--ink-2);border-top:1px solid var(--line)">
   <div class="wrap order">
     <div>
-      <span class="eyebrow">Haz tu pedido</span>
+      <span class="eyebrow">Paso 1 · Empieza aquí</span>
       <h2 class="rise" style="margin-top:14px">Cuéntanos <span class="script">su historia</span></h2>
-      <p class="lead" style="margin-top:18px">Llena estos datos y te armamos el mensaje listo para enviarlo por WhatsApp. Ahí conversamos los detalles y empezamos tuCANCIÓN.</p>
+      <p class="lead" style="margin-top:18px">Llena estos datos y te armamos el mensaje para WhatsApp. Al enviarlo empieza tu canción: luego vienen la propuesta, los ajustes y la entrega.</p>
       <p class="note" style="margin-top:22px">WhatsApp: <span class="wa-num" id="waText"></span></p>
     </div>
     <form class="order-form" id="orderForm" novalidate>
@@ -593,7 +715,8 @@ footer img{height:22px;width:auto}
     <h2 class="rise" style="margin-top:14px">Lo que todos <span class="script">preguntan</span></h2>
     </div></div>
     <div class="faq">
-      <details open><summary>¿Cómo empiezo?</summary><p>Escríbenos por WhatsApp con tu idea: la ocasión, la persona y lo que quieres decirle. Desde ahí te acompañamos en todo el proceso.</p></details>
+      <details open><summary>¿Cómo empiezo?</summary><p>Escríbenos por WhatsApp o llena el formulario de pedido con la ocasión, la persona y lo que quieres decirle. Ese es el paso 1; desde ahí te acompañamos hasta la entrega. <a href="#como" style="color:var(--lilac)">Ver los 4 pasos</a></p></details>
+      <details><summary>¿Qué necesito tener listo?</summary><p>Su nombre y cómo le dicen, la ocasión y la fecha, 2 o 3 recuerdos, frases que no pueden faltar, el estilo musical y la voz. Si tu plan incluye video, también sus fotos.</p></details>
       <details><summary>¿La letra es de verdad personalizada?</summary><p>Sí. Escribimos la letra con la historia, las anécdotas y las palabras clave que nos compartes. No es una plantilla con el nombre cambiado.</p></details>
       <details><summary>¿Puedo pedir ajustes?</summary><p>Sí. Te enviamos un borrador con la letra y la melodía, y hacemos los ajustes necesarios según tus comentarios.</p></details>
       <details><summary>¿Qué estilos musicales puedo elegir?</summary><p>Balada, pop, ritmos tropicales y muchos más. Si tienes un género en mente, cuéntanos.</p></details>
@@ -1125,6 +1248,15 @@ resize(); addEventListener("resize", resize);
 function loop(ts){ drawViz(ts); drawNotes(); drawMascotFrame(ts); requestAnimationFrame(loop); }
 if(reduce){ drawViz(0); drawNotes(); addEventListener("scroll", drawStaticMascots, {passive:true}); mark.addEventListener("load", drawStaticMascots); setInterval(()=>{ if(isPlaying) drawViz(0); }, 250); }
 else requestAnimationFrame(loop);
+
+/* proceso: la línea se llena y cada paso se enciende al llegar a él */
+const procEl = $("#process"), psteps = [...document.querySelectorAll(".pstep")];
+function updateProcess(){
+  const r = procEl.getBoundingClientRect(), line = innerHeight*.6;
+  procEl.style.setProperty("--fill", reduce ? 1 : Math.max(0, Math.min(1, (line - r.top) / r.height)));
+  psteps.forEach(st => st.classList.toggle("on", reduce || st.querySelector(".pnum").getBoundingClientRect().top < line));
+}
+addEventListener("scroll", updateProcess, {passive:true}); addEventListener("resize", updateProcess); updateProcess();
 
 /* ===== pedido ===== */
 $("#oGenre").innerHTML = GENRES.map(g=>`<option>${g}</option>`).join("") + "<option>Otro</option>";
