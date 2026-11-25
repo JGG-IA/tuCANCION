@@ -25,6 +25,7 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--void);color:var(--cream);font-family:var(--f-body);font-size:17px;line-height:1.55;overflow-x:clip}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--void)}
@@ -44,6 +45,9 @@ img{display:block;max-width:100%}
 .btn.ghost{background:transparent;color:var(--cream);box-shadow:none;border:1px solid var(--edge)}
 .btn svg{width:18px;height:18px}
 .preview-tag{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:65;font:600 .7rem var(--f-mono);letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;border-radius:999px;color:var(--cream);white-space:nowrap}
+
+#notesBg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+main,footer{position:relative;z-index:1}
 
 /* nav flotante */
 .nav{position:fixed;z-index:50;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);width:min(960px,calc(100% - 32px));display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 10px 10px 20px;border-radius:999px}
@@ -142,7 +146,7 @@ img{display:block;max-width:100%}
 
 /* reproductor: el deck y la caja de discos */
 .studio{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:20px;margin-top:56px;align-items:start}
-.deck{border-radius:32px;padding:18px;display:grid;gap:16px;min-width:0}
+.deck{border-radius:32px;padding:18px;display:grid;grid-template-columns:minmax(0,1fr);gap:16px;min-width:0}
 .screen{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:20px;overflow:hidden;background:radial-gradient(circle at 50% 40%,#3B2240,#0C0610 75%)}
 #ytPlayer,.screen iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .screen-off{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:12px;text-align:center;padding:20px}
@@ -262,6 +266,7 @@ footer img{height:22px;width:auto}
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs></defs></svg>
 
+<canvas id="notesBg" aria-hidden="true"></canvas>
 <nav class="nav glass" aria-label="Principal">
   <a href="#inicio" aria-label="tuCANCIÓN, inicio"><img src="assets/logo-blanco.webp" alt="tuCANCIÓN" width="900" height="148"></a>
   <ul>
@@ -651,6 +656,42 @@ const LISTS = [
   const tag = document.createElement("script"); tag.src = "https://www.youtube.com/iframe_api"; tag.onerror = offline; document.head.appendChild(tag);
   setTimeout(offline, 6000);
   select(0, false);
+})();
+
+/* ---- notas musicales que viajan con el scroll ---- */
+(function(){
+  const c = $("#notesBg"), g = c.getContext("2d");
+  const mark = new Image(); mark.src = "assets/nota-corazon.webp";
+  const GL = ["♪","♫","♩","♬"], COL = ["#D6A8E6","#FF6FAE","#FFF3EC"];
+  const rnd = k => { const v = Math.sin(k*78.233)*43758.5453; return v - Math.floor(v); };
+  const N = innerWidth < 700 ? 22 : 38;
+  const notes = Array.from({length:N}, (_,k) => ({
+    x: rnd(k+1), y: rnd(k+11), d: .25 + rnd(k+21)*.75, ph: rnd(k+31)*6.28,
+    rot: (rnd(k+41)-.5)*.8, g: GL[k%4], col: COL[k%3], img: k%6 === 0
+  })).sort((a,b) => a.d - b.d);
+  let W = 0, H = 0, sy = scrollY, vel = 0, last = scrollY;
+  function size(){ const r = Math.min(devicePixelRatio||1, 2); W = innerWidth; H = innerHeight; c.width = W*r; c.height = H*r; g.setTransform(r,0,0,r,0,0); }
+  size(); addEventListener("resize", size);
+  function draw(){
+    sy += (scrollY - sy)*.12;
+    vel += ((scrollY - last) - vel)*.1; last = scrollY;
+    g.clearRect(0,0,W,H);
+    const span = H + 240;
+    for(const n of notes){
+      const speed = .35 + n.d*1.1;                       // las más cercanas pasan más rápido
+      const y = (((n.y*span - sy*speed) % span) + span) % span - 120;
+      const x = n.x*W + Math.sin(sy*.0025*(.5 + n.d) + n.ph)*70*n.d;
+      const size = 16 + n.d*46, spin = n.rot + sy*.0015*(n.d - .5)*2 + vel*.004*n.d;
+      g.save(); g.globalAlpha = .12 + n.d*.5; g.translate(x, y); g.rotate(spin);
+      const s = 1 + Math.min(.35, Math.abs(vel)*.004*n.d); g.scale(s, s);
+      if(n.img && mark.naturalWidth){ g.drawImage(mark, -size*.9, -size*.7, size*1.8, size*1.4); }
+      else { g.fillStyle = n.col; g.font = `${size}px serif`; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(n.g, 0, 0); }
+      g.restore();
+    }
+    if(!reduce) requestAnimationFrame(draw);
+  }
+  mark.onload = () => reduce && draw();
+  draw();
 })();
 
 /* ---- luz que sigue al cursor en tarjetas y planes ---- */
