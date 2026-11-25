@@ -46,8 +46,14 @@ img{display:block;max-width:100%}
 .btn svg{width:18px;height:18px}
 .preview-tag{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:65;font:600 .7rem var(--f-mono);letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;border-radius:999px;color:var(--cream);white-space:nowrap}
 
-#notesBg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 main,footer{position:relative;z-index:1}
+
+/* Notita */
+.buddy{position:fixed;z-index:55;right:calc(var(--gr) + 6px);bottom:calc(64px + env(safe-area-inset-bottom,0px));width:120px;cursor:pointer;will-change:transform}
+.buddy canvas{display:block;width:120px;height:152px;filter:drop-shadow(0 12px 24px rgba(255,111,174,.35))}
+.bubble{position:absolute;right:70%;bottom:78%;width:max-content;max-width:200px;padding:10px 14px;border-radius:18px 18px 4px 18px;font:700 .86rem/1.3 var(--f-body);color:var(--cream);opacity:0;transform:translateY(8px) scale(.9);transform-origin:bottom right;transition:opacity .3s,transform .35s cubic-bezier(.2,1.4,.3,1);pointer-events:none}
+.bubble.show{opacity:1;transform:none}
+@media (max-width:700px){.buddy{width:66px;right:calc(var(--gr) - 4px);bottom:calc(54px + env(safe-area-inset-bottom,0px))}.buddy canvas{width:66px;height:84px}.bubble{max-width:150px;font-size:.76rem;padding:8px 11px}}
 
 /* nav flotante */
 .nav{position:fixed;z-index:50;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);width:min(960px,calc(100% - 32px));display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 10px 10px 20px;border-radius:999px}
@@ -103,26 +109,44 @@ main,footer{position:relative;z-index:1}
 .sec-title{font-size:clamp(2.6rem,8vw,7.5rem);margin-top:16px;max-width:12ch}
 .sec-title .script{font-size:1.05em;line-height:.6}
 
-/* bento */
-.bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(220px,auto);gap:14px;margin-top:56px}
-.tile{position:relative;overflow:hidden;border-radius:28px;padding:26px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;min-width:0;--mx:50%;--my:50%}
-.tile::before{content:"";position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx) var(--my),rgba(255,111,174,.18),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
+/* bento con profundidad */
+.bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(230px,auto);gap:16px;margin-top:56px;perspective:1200px}
+.tile{position:relative;overflow:hidden;border-radius:30px;padding:26px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;min-width:0;--mx:50%;--my:50%;--rx:0deg;--ry:0deg;
+  background:radial-gradient(130% 110% at 100% 0%,color-mix(in srgb,var(--t1) 42%,transparent),transparent 58%),linear-gradient(165deg,color-mix(in srgb,var(--t2) 70%,#170B1C),#100713 85%);
+  border:1px solid rgba(255,235,250,.16);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25),inset 0 -30px 60px -40px rgba(0,0,0,.6),0 2px 0 rgba(255,255,255,.04),0 30px 60px -30px rgba(0,0,0,.85),0 50px 90px -60px color-mix(in srgb,var(--t1) 70%,transparent);
+  transform:rotateX(var(--rx)) rotateY(var(--ry));transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .4s}
+.tile:hover{transition:transform .12s linear,box-shadow .4s;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 40px 80px -30px rgba(0,0,0,.9),0 50px 110px -50px var(--t1)}
+.tile::before{content:"";position:absolute;inset:0;background:radial-gradient(380px circle at var(--mx) var(--my),rgba(255,255,255,.14),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
 .tile:hover::before{opacity:1}
-.tile h3{font:900 clamp(1.5rem,2.6vw,2.2rem)/.95 var(--f-kin);font-variation-settings:"wdth" 110;text-transform:uppercase;margin:0;letter-spacing:-.02em}
-.tile p{margin:0;color:var(--mute);font-size:.97rem;max-width:36ch}
+.tile>*{position:relative}
+.tile h3{font:900 clamp(1.6rem,2.8vw,2.4rem)/.95 var(--f-kin);font-variation-settings:"wdth" 110;text-transform:uppercase;margin:0;letter-spacing:-.02em;text-shadow:0 6px 30px rgba(0,0,0,.5);transform:translateZ(30px)}
+.tile p{margin:0;color:rgba(255,243,236,.78);font-size:.98rem;max-width:36ch}
+.tile-go{align-self:flex-start;margin-top:10px;font:700 .86rem var(--f-body);text-decoration:none;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);transition:background .2s}
+.tile-go:hover{background:rgba(255,255,255,.2)}
 .t-a{grid-column:span 2;grid-row:span 2}
-.t-b{grid-column:span 2}
-.t-e{grid-column:span 2}
-.t-f{grid-column:span 2}
-.eq{position:absolute;inset:26px 26px auto auto;display:flex;align-items:flex-end;gap:6px;height:44%}
-.eq i{width:12px;border-radius:6px;background:var(--glow);animation:eq 1.1s ease-in-out infinite alternate}
-.wave{position:absolute;inset:24px 24px auto 24px;height:90px}
-.qr{position:absolute;top:22px;right:22px;width:96px;height:96px;border-radius:14px;background:var(--cream);padding:8px}
+.t-b,.t-e,.t-f{grid-column:span 2}
+.eq{position:absolute!important;inset:28px 28px auto auto;display:flex;align-items:flex-end;gap:7px;height:46%;filter:drop-shadow(0 0 18px rgba(255,111,174,.6))}
+.eq i{width:14px;border-radius:7px;background:var(--glow);animation:eq 1.1s ease-in-out infinite alternate}
+.confetti{position:absolute!important;inset:0;pointer-events:none}
+.confetti i{position:absolute;width:10px;height:16px;border-radius:3px;top:-20px;animation:fall 5s linear infinite}
+.confetti i:nth-child(odd){background:var(--pink)}.confetti i:nth-child(even){background:var(--orchid)}
+.confetti i:nth-child(1){left:8%;animation-delay:0s}.confetti i:nth-child(2){left:20%;animation-delay:-1.2s}.confetti i:nth-child(3){left:33%;animation-delay:-2.6s}.confetti i:nth-child(4){left:45%;animation-delay:-.7s}
+.confetti i:nth-child(5){left:12%;animation-delay:-3.4s}.confetti i:nth-child(6){left:28%;animation-delay:-4.1s}.confetti i:nth-child(7){left:40%;animation-delay:-1.9s}.confetti i:nth-child(8){left:52%;animation-delay:-3s}
+.wave{position:absolute!important;inset:24px 24px auto 24px;height:90px;filter:drop-shadow(0 0 12px rgba(255,111,174,.55))}
+.art-heart{position:absolute!important;top:20px;right:20px;width:110px;height:auto;filter:drop-shadow(0 0 24px rgba(255,111,174,.7));animation:float 6s ease-in-out infinite}
+.candle{position:absolute!important;top:26px;right:34px;width:30px;height:110px}
+.candle .wax{position:absolute;bottom:0;left:3px;width:24px;height:70px;border-radius:6px 6px 4px 4px;background:linear-gradient(90deg,#F6E6EE,#CDB4C8)}
+.candle .flame{position:absolute;bottom:68px;left:7px;width:16px;height:30px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(circle at 50% 75%,#FFF6D6,#FFC98A 45%,rgba(255,111,174,.4) 80%);box-shadow:0 0 30px 10px rgba(255,201,138,.45);transform-origin:50% 100%;animation:flicker 1.6s ease-in-out infinite}
+.qr{position:absolute!important;top:22px;right:22px;width:104px;height:104px;border-radius:16px;background:var(--cream);padding:8px;transform:rotate(6deg) translateZ(40px);box-shadow:0 20px 40px -14px rgba(0,0,0,.8)}
 .qr canvas{width:100%;height:100%;display:block}
-.brandlist{position:absolute;inset:22px 22px auto 22px;display:flex;flex-wrap:wrap;gap:6px}
-.brandlist span{font:600 .74rem var(--f-mono);padding:6px 10px;border-radius:999px;border:1px solid var(--edge);color:var(--mute)}
-.big-emoji{position:absolute;top:18px;right:22px;width:110px;height:auto;opacity:.9;animation:float 6s ease-in-out infinite}
-@media (max-width:900px){.bento{grid-template-columns:1fr 1fr}.t-a{grid-column:span 2;grid-row:span 1;min-height:320px}}
+.speaker{position:absolute!important;top:26px;right:30px;width:60px;height:60px}
+.speaker span{position:absolute;inset:0;border-radius:50%;border:3px solid var(--orchid);opacity:0;animation:ring 2.4s ease-out infinite}
+.speaker span:nth-child(2){animation-delay:.8s}.speaker span:nth-child(3){animation-delay:1.6s}
+@keyframes fall{to{transform:translateY(560px) rotate(540deg)}}
+@keyframes flicker{0%,100%{transform:scale(1) rotate(-2deg)}50%{transform:scale(1.08,1.15) rotate(3deg)}}
+@keyframes ring{0%{transform:scale(.4);opacity:.9}100%{transform:scale(2);opacity:0}}
+@media (max-width:900px){.bento{grid-template-columns:1fr 1fr}.t-a{grid-column:span 2;grid-row:span 1;min-height:340px}}
 @media (max-width:560px){.bento{grid-template-columns:1fr}.t-a,.t-b,.t-e,.t-f{grid-column:auto}}
 
 /* proceso: tarjetas que se apilan */
@@ -185,6 +209,7 @@ main,footer{position:relative;z-index:1}
 .qi{position:relative;flex:0 0 118px;aspect-ratio:16/9;border-radius:12px;overflow:hidden;border:2px solid transparent;padding:0;cursor:pointer;background:#1B0E21 center/cover no-repeat}
 .qi span{position:absolute;left:6px;bottom:4px;font:700 .72rem var(--f-mono);color:#fff;text-shadow:0 1px 6px #000}
 .qi.on{border-color:var(--pink)}
+.qi.more{display:grid;place-items:center;text-align:center;text-decoration:none;background:var(--glow);color:var(--void);font:800 .74rem/1.2 var(--f-body);padding:6px}
 .crate{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .sleeve{position:relative;aspect-ratio:1;border:0;padding:0;background:none;cursor:pointer;text-align:left;color:#fff;font:inherit}
 .sleeve .disc{position:absolute;z-index:1;top:12%;right:10%;width:36%;aspect-ratio:1;border-radius:50%;background:repeating-radial-gradient(circle,rgba(255,255,255,.08) 0 1px,transparent 1px 5px),radial-gradient(circle,var(--c2) 0 16%,#0a050c 16.5%);transition:transform .7s cubic-bezier(.2,.8,.2,1);box-shadow:0 14px 40px -14px #000}
@@ -224,10 +249,27 @@ main,footer{position:relative;z-index:1}
 @media (max-width:900px){.plans{grid-template-columns:1fr}}
 
 /* marcas */
-.brands .big{font-size:clamp(2.4rem,7.4vw,6.8rem);max-width:16ch;margin-top:18px}
+.brands{position:relative;background:radial-gradient(90% 70% at 85% 10%,rgba(255,111,174,.22),transparent 60%),linear-gradient(170deg,#5A3A60,#2A1530 70%,var(--void));border-block:1px solid var(--edge)}
+.brands .big{font-size:clamp(2.2rem,6.2vw,5.6rem);max-width:17ch;margin-top:18px}
 .brands .big em{font-style:normal;background:var(--glow);-webkit-background-clip:text;background-clip:text;color:transparent}
-.incl{display:flex;flex-wrap:wrap;gap:10px;margin-top:40px}
-.incl span{padding:12px 18px;border-radius:999px;font-weight:600}
+.story{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-top:56px}
+.story>div{border-top:2px solid rgba(255,255,255,.28);padding-top:18px;min-width:0}
+.story small{display:block;font:800 1.05rem/1.2 var(--f-body);margin-bottom:8px}
+.story p{margin:0;color:rgba(255,243,236,.8);font-size:.98rem}
+.incl-title{font:900 clamp(1.5rem,3vw,2.2rem)/1 var(--f-kin);text-transform:uppercase;margin:64px 0 20px}
+.incl{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.inc{position:relative;padding:22px;border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,255,255,.03));border:1px solid var(--edge);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 20px 40px -24px rgba(0,0,0,.8);transition:transform .3s}
+.inc:hover{transform:translateY(-4px)}
+.inc .ico{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:var(--glow);color:var(--void);font:900 .95rem var(--f-kin);margin-bottom:14px}
+.inc h4{margin:0 0 6px;font:800 1.15rem var(--f-body)}
+.inc p{margin:0;color:var(--mute);font-size:.95rem}
+.clients{margin-top:56px}
+.clients small{font:600 .74rem var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--orchid)}
+.client-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.client-list button{font:700 .95rem var(--f-body);color:var(--cream);padding:11px 18px;border-radius:999px;border:1px solid var(--edge);background:rgba(255,255,255,.06);cursor:pointer;transition:background .2s,transform .2s}
+.client-list button:hover{background:var(--cream);color:var(--void);transform:translateY(-2px)}
+@media (max-width:900px){.story{grid-template-columns:1fr 1fr}.incl{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.story,.incl{grid-template-columns:1fr}}
 
 /* cierre */
 .final{position:relative;overflow:hidden;text-align:center;padding-block:clamp(100px,16vw,200px)}
@@ -236,9 +278,15 @@ main,footer{position:relative;z-index:1}
 .final .script{font-size:1em;line-height:.7}
 .final .btn{margin-top:44px;font-size:1.15rem;padding:22px 36px}
 .final .contact{margin-top:22px;color:var(--mute);font:600 .9rem var(--f-mono)}
-footer{border-top:1px solid var(--edge);padding-block:30px calc(70px + env(safe-area-inset-bottom,0px))}
+footer{border-top:1px solid var(--edge);padding-block:30px calc(200px + env(safe-area-inset-bottom,0px))}
+@media (max-width:700px){footer{padding-bottom:calc(160px + env(safe-area-inset-bottom,0px))}}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px;color:var(--mute);font-size:.88rem}
-footer img{height:22px;width:auto}
+footer>.wrap>img{height:22px;width:auto}
+.credit{display:inline-flex;align-items:center;gap:10px;text-decoration:none;padding:6px 14px 6px 8px;border-radius:999px;border:1px solid var(--edge);transition:background .2s,border-color .2s}
+.credit:hover{background:rgba(120,200,255,.08);border-color:rgba(120,200,255,.5)}
+.credit img{height:30px;width:auto;filter:drop-shadow(0 0 8px rgba(80,200,255,.5))}
+.credit b{color:var(--cream)}
+
 
 /* cursor */
 .cursor{position:fixed;left:0;top:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--cream);mix-blend-mode:difference;pointer-events:none;z-index:80;transition:width .25s,height .25s,margin .25s;display:none}
@@ -248,7 +296,7 @@ footer img{height:22px;width:auto}
 @supports (animation-timeline:view()){
   .rise{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 55%}
 }
-@keyframes rise{from{transform:translateY(60px)}to{transform:none}}
+@keyframes rise{from{translate:0 60px}to{translate:0 0}}
 @keyframes shrink{to{transform:scale(.9);filter:brightness(.6)}}
 @keyframes drop{from{transform:translateY(-.5em) rotate(-8deg) scaleY(1.3)}to{transform:none}}
 @keyframes slide{to{transform:translateX(-50%)}}
@@ -266,7 +314,6 @@ footer img{height:22px;width:auto}
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs></defs></svg>
 
-<canvas id="notesBg" aria-hidden="true"></canvas>
 <nav class="nav glass" aria-label="Principal">
   <a href="#inicio" aria-label="tuCANCIÓN, inicio"><img src="assets/logo-blanco.webp" alt="tuCANCIÓN" width="900" height="148"></a>
   <ul>
@@ -276,7 +323,7 @@ footer img{height:22px;width:auto}
     <li><a href="#planes">Planes</a></li>
     <li><a href="#marcas">Marcas</a></li>
   </ul>
-  <a class="btn magnetic" href="https://wa.me/573193209422" target="_blank" rel="noopener">Crear canción</a>
+  <a class="btn magnetic" href="https://wa.me/573193209422" target="_blank" rel="noopener">Crear mi canción</a>
 </nav>
 
 <main id="inicio">
@@ -287,18 +334,18 @@ footer img{height:22px;width:auto}
   <div class="wrap">
     <span class="label">La banda sonora de tus momentos</span>
     <h1>
-      <span class="kin l1">Una canción que dice</span>
+      <span class="kin l1">Tu canción para</span>
       <span class="kin name-line" id="nameLine" aria-live="polite">Valentina</span>
-      <span class="kin l3">hecha <span class="script">solo para ella</span></span>
+      <span class="kin l3">con <span class="script">tu historia</span></span>
     </h1>
     <div class="hero-row">
       <div class="namer glass">
-        <label for="nameIn">Escribe su nombre</label>
+        <label for="nameIn">¿Para quién es?</label>
         <input id="nameIn" type="text" value="Valentina" maxlength="16" autocomplete="off">
-        <a class="btn magnetic" id="heroCta" href="https://wa.me/573193209422" target="_blank" rel="noopener">Crear su canción
+        <a class="btn magnetic" id="heroCta" href="https://wa.me/573193209422" target="_blank" rel="noopener">Crear mi canción
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
-      <p class="lead">Nos cuentas su historia y la convertimos en una canción original, con su nombre y el ritmo que más le gusta.</p>
+      <p class="lead">Cuéntanos tu historia y nosotros la convertimos en tu canción: original, con su nombre y el ritmo que elijas.</p>
     </div>
   </div>
 </section>
@@ -313,37 +360,43 @@ footer img{height:22px;width:auto}
     <span class="label">Lo que hacemos</span>
     <h2 class="kin sec-title rise">Para cada <span class="script">momento</span></h2>
     <div class="bento">
-      <article class="tile glass t-a rise">
+      <article class="tile t-a rise" style="--t1:#FF6FAE;--t2:#775478">
+        <div class="confetti" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <div class="eq" aria-hidden="true"><i style="animation-delay:-.2s"></i><i style="animation-delay:-.7s"></i><i style="animation-delay:-.4s"></i><i style="animation-delay:-.9s"></i><i style="animation-delay:-.1s"></i><i style="animation-delay:-.6s"></i></div>
         <span class="label">La más pedida</span>
         <h3>Cumpleaños</h3>
-        <p>Una canción con su nombre que suena en la fiesta y que todos terminan cantando.</p>
+        <p>Tu canción suena en la fiesta con su nombre y todos terminan cantándola.</p>
+        <a class="tile-go" href="https://wa.me/573193209422?text=%C2%A1Hola!%20Quiero%20una%20canci%C3%B3n%20de%20cumplea%C3%B1os%20%F0%9F%8E%B5" target="_blank" rel="noopener">Quiero esta →</a>
       </article>
-      <article class="tile glass t-b rise">
+      <article class="tile t-b rise" style="--t1:#D6A8E6;--t2:#5B2E6E">
         <canvas class="wave" id="wave" aria-hidden="true"></canvas>
         <h3>Aniversarios</h3>
-        <p>Cómo se conocieron, su primera cita, sus lugares. Su historia juntos, en una melodía.</p>
+        <p>Cómo se conocieron, su primera cita, sus lugares: tu historia de amor, en una melodía.</p>
+        <a class="tile-go" href="https://wa.me/573193209422?text=%C2%A1Hola!%20Quiero%20una%20canci%C3%B3n%20de%20aniversario%20%F0%9F%8E%B5" target="_blank" rel="noopener">Quiero esta →</a>
       </article>
-      <article class="tile glass rise">
-        <img class="big-emoji" src="assets/nota-corazon.webp" alt="" width="300" height="238">
+      <article class="tile rise" style="--t1:#FFB3D1;--t2:#6B3458">
+        <img class="art-heart" src="assets/nota-corazon.webp" alt="" width="300" height="238">
         <h3>Bodas</h3>
-        <p>Para el primer baile o la entrada.</p>
+        <p>Para tu primer baile o tu entrada.</p>
       </article>
-      <article class="tile glass rise">
+      <article class="tile rise" style="--t1:#FFC98A;--t2:#3B2240">
+        <div class="candle" aria-hidden="true"><span class="flame"></span><span class="wax"></span></div>
         <h3>Homenajes</h3>
         <p>Una despedida que guarda su recuerdo.</p>
       </article>
-      <article class="tile glass t-e rise">
+      <article class="tile t-e rise" style="--t1:#C489D0;--t2:#4E2F52">
         <div class="qr" aria-hidden="true"><canvas id="qr" width="100" height="100"></canvas></div>
         <span class="label">E-card musical</span>
         <h3>Escanea y suena</h3>
-        <p>Tarjeta con código QR que, al escanearla, reproduce su canción.</p>
+        <p>Te damos una tarjeta con código QR: la escanean y suena tu canción.</p>
+        <a class="tile-go" href="https://wa.me/573193209422?text=%C2%A1Hola!%20Quiero%20una%20E-card%20musical%20%F0%9F%8E%B5" target="_blank" rel="noopener">Quiero esta →</a>
       </article>
-      <article class="tile glass t-f rise">
-        <div class="brandlist" aria-hidden="true"><span>Pichincha</span><span>Orbi Sport</span><span>FIAT</span><span>Crianza Virtuosa</span><span>Christian Ortiz</span></div>
+      <article class="tile t-f rise" style="--t1:#9C72A0;--t2:#2A1530">
+        <div class="speaker" aria-hidden="true"><span></span><span></span><span></span></div>
         <span class="label">Empresas</span>
         <h3>Jingles de marca</h3>
-        <p>Una melodía que hace que te recuerden. <a href="#marcas" style="color:var(--orchid)">Ver más</a></p>
+        <p>Creamos la melodía que hará que te recuerden.</p>
+        <a class="tile-go" href="#marcas">Ver más →</a>
       </article>
     </div>
   </div>
@@ -445,18 +498,35 @@ footer img{height:22px;width:auto}
 <section class="sec brands" id="marcas">
   <div class="wrap">
     <span class="label">Para marcas y empresas</span>
-    <h2 class="kin big rise">El oído es el sentido que <em>más recuerda</em></h2>
-    <p class="lead rise" style="max-width:52ch;color:var(--mute);margin-top:24px">Cuando escuchas un jingle famoso, tu mente lo completa sola. Creamos esa melodía para tu marca: canción completa de 3 a 4 minutos, jingle de 10 a 15 segundos y pista instrumental, en WAV y MP3.</p>
-    <div class="incl">
-      <span class="glass">Canción completa</span><span class="glass">4 estrofas + 2 coros</span><span class="glass">Jingle de 10–15 s</span><span class="glass">Pista instrumental</span><span class="glass">WAV y MP3</span>
+    <h2 class="kin big rise">¿Sabías que el oído es el sentido que <em>más genera recordación</em>?</h2>
+    <div class="story">
+      <div class="rise"><small>Piensa en esto</small><p>Cuando escuchas “Coordinadora” o “Servientrega”, tu mente completa el jingle sin esfuerzo.</p></div>
+      <div class="rise"><small>Esa es la magia de una marca auditiva</small><p>Permanece en la memoria de las personas, las acompaña y las conecta emocionalmente con la empresa.</p></div>
+      <div class="rise"><small>Ahora imagina</small><p>Que cada cliente, proveedor y colaborador recuerde tu marca con solo escuchar una melodía creada para ti.</p></div>
+      <div class="rise"><small>Por eso</small><p>En tuCANCIÓN creamos una canción para <b>tu marca</b>.</p></div>
     </div>
+    <h3 class="incl-title">Tu jingle incluye</h3>
+    <div class="incl">
+      <article class="inc"><span class="ico" aria-hidden="true">♫</span><h4>Canción completa</h4><p>Con una duración de 3 a 4 minutos.</p></article>
+      <article class="inc"><span class="ico" aria-hidden="true">✎</span><h4>Letra original</h4><p>Creada para reflejar tus valores, tu visión y tu esencia.</p></article>
+      <article class="inc"><span class="ico" aria-hidden="true">4+2</span><h4>4 estrofas + 2 coros</h4><p>Que cuentan la historia de tu empresa.</p></article>
+      <article class="inc"><span class="ico" aria-hidden="true">10″</span><h4>Jingle final</h4><p>De 10 a 15 segundos para redes, eventos y videos corporativos.</p></article>
+      <article class="inc"><span class="ico" aria-hidden="true">⇩</span><h4>Entrega</h4><p>En formatos WAV y MP3.</p></article>
+      <article class="inc"><span class="ico" aria-hidden="true">♪</span><h4>Pista instrumental</h4><p>Para usar como cortina musical en tus contenidos.</p></article>
+    </div>
+    <div class="clients">
+      <small>Marcas que ya confiaron en nosotros · toca una para escuchar</small>
+      <div class="client-list" id="clientList"></div>
+    </div>
+    <a class="btn magnetic" style="margin-top:34px" href="https://wa.me/573193209422?text=%C2%A1Hola!%20Quiero%20el%20jingle%20de%20mi%20marca%20%F0%9F%8E%B5" target="_blank" rel="noopener">Quiero el jingle de mi marca
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
   </div>
 </section>
 
-<section class="final">
+<section class="final" id="cierre">
   <div class="wrap">
-    <span class="label">¿Lista la historia?</span>
-    <h2 class="kin" style="margin-top:18px">¿Cuál es <span class="script">su canción</span>?</h2>
+    <span class="label">¿Lista tu historia?</span>
+    <h2 class="kin" style="margin-top:18px">¿Cuál es <span class="script">tu canción</span>?</h2>
     <a class="btn magnetic" href="https://wa.me/573193209422" target="_blank" rel="noopener">Escribir por WhatsApp
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     <p class="contact">+57 319 320 9422 · tucancion.click</p>
@@ -464,10 +534,21 @@ footer img{height:22px;width:auto}
 </section>
 </main>
 
-<footer>
-  <div class="wrap"><img src="assets/logo-blanco.webp" alt="tuCANCIÓN" width="900" height="148"><span>Propuesta de rediseño · vista previa, no publicada</span></div>
+<footer id="pie">
+  <div class="wrap">
+    <img src="assets/logo-blanco.webp" alt="tuCANCIÓN" width="900" height="148">
+    <span>© 2026 tuCANCIÓN · La banda sonora de tus momentos</span>
+    <a class="credit" href="https://jgg-ia.github.io/portafolio/" target="_blank" rel="noopener">
+      <img src="assets/jg.webp" alt="" width="160" height="109">
+      <span>Desarrollado por <b>Julián García</b></span>
+    </a>
+  </div>
 </footer>
 
+<div class="buddy" id="buddy" role="img" aria-label="Notita, la nota musical de tuCANCIÓN">
+  <span class="bubble glass" id="bubble"></span>
+  <canvas id="buddyC" width="150" height="190"></canvas>
+</div>
 <span class="preview-tag glass">Propuesta de rediseño · no publicada</span>
 <div class="cursor" id="cursor" aria-hidden="true"></div>
 
@@ -529,7 +610,7 @@ function setName(v){
   const L = Math.max(1, name.length - 1), mix = (a,b,t) => Math.round(a + (b-a)*t);
   nameLine.innerHTML = [...name].map((c,i) => `<span class="ch" style="animation-delay:${i*35}ms;color:rgb(${mix(255,255,i/L)},${mix(243,111,i/L)},${mix(236,174,i/L)})">${c === " " ? "&nbsp;" : c.replace(/[&<>]/g, x => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[x]))}</span>`).join("");
   fitName();
-  $("#heroCta").href = "https://wa.me/573193209422?text=" + encodeURIComponent(`¡Hola! Quiero una canción para ${name} 🎵`);
+  $("#heroCta").href = "https://wa.me/573193209422?text=" + encodeURIComponent(`¡Hola! Quiero crear mi canción para ${name} 🎵`);
 }
 nameIn.addEventListener("input", () => setName(nameIn.value));
 addEventListener("resize", fitName);
@@ -594,35 +675,40 @@ const LISTS = [
   ["PLAfUz_JVZIWutuX9Eplb_FaRtxadc73HN","Ocasiones Especiales","Cumpleaños · bodas","#FF7AB2","#8E2F63"],
   ["PLAfUz_JVZIWsdJ1g3zX13qit7KR6leR9H","Peticiones Especiales","A tu medida","#E58FB6","#6B3458"]
 ];
-(function(){
-  const deck = $("#deck"), crate = $("#crate");
-  let yt = null, ready = false, playing = false, cur = 0, loaded = null;
+window.musicPlaying = false;
+const player = (function(){
+  const deck = $("#deck"), crate = $("#crate"), queue = $("#queue");
+  let yt = null, ready = false, playing = false, loaded = 0, pending = null;
+  const link = i => `https://www.youtube.com/playlist?list=${LISTS[i][0]}`;
+  const fmt = s => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`;
   crate.innerHTML = LISTS.map(([id,t,k,c1,c2],i) => `
     <button class="sleeve" type="button" data-i="${i}" style="--c1:${c1};--c2:${c2}" aria-label="Escuchar ${t}">
       <span class="disc" aria-hidden="true"></span>
       <span class="cover"><small>${k}</small><b>${t}</b></span>
-    </button>`).join("") + `<div class="mine"><p>¿Y la <span class="script">suya</span>?</p><a class="btn" href="https://wa.me/573193209422" target="_blank" rel="noopener">Crear la suya</a></div>`;
-  const fmt = s => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`;
+    </button>`).join("") + `<div class="mine"><p>¿Y la <span class="script">tuya</span>?</p><a class="btn" href="https://wa.me/573193209422" target="_blank" rel="noopener">Crear mi canción</a></div>`;
 
-  function select(i, play){
-    cur = i; const [id, t] = LISTS[i];
+  // el disco resaltado y el nombre de la lista siempre muestran la lista que está cargada
+  function mark(i){
+    loaded = i;
     crate.querySelectorAll(".sleeve").forEach((s,k) => s.classList.toggle("on", k === i));
-    $("#nList").textContent = t; $("#ytOut").href = yt_link(id);
-    if(!ready){ $("#nTitle").textContent = "Escúchala en YouTube"; return; }
+    $("#nList").textContent = LISTS[i][1]; $("#ytOut").href = link(i);
+  }
+  function moreTile(){ return `<a class="qi more" href="${link(loaded)}" target="_blank" rel="noopener">Ver más<br>en YouTube</a>`; }
+  function renderQueue(){
+    const ids = (ready && yt.getPlaylist && yt.getPlaylist()) || [], at = ready && yt.getPlaylistIndex ? yt.getPlaylistIndex() : -1;
+    queue.innerHTML = ids.map((v,k) => `<button class="qi ${k===at?"on":""}" type="button" data-k="${k}" style="background-image:url(https://i.ytimg.com/vi/${v}/mqdefault.jpg)" aria-label="Canción ${k+1}"><span>${k+1}</span></button>`).join("") + moreTile();
+  }
+  function select(i, play){
+    mark(i);
+    queue.innerHTML = moreTile();
+    if(!ready){ pending = {i, play}; $("#nTitle").textContent = "Escúchala en YouTube"; return; }
     $("#nTitle").textContent = play ? "Cargando…" : "Dale play a nuestras canciones";
-    loaded = id;
-    const opt = {list:id, listType:"playlist", index:0};
+    const opt = {list:LISTS[i][0], listType:"playlist", index:0};
     play ? yt.loadPlaylist(opt) : yt.cuePlaylist(opt);
   }
-  function yt_link(id){ return `https://www.youtube.com/playlist?list=${id}`; }
   crate.addEventListener("click", e => { const b = e.target.closest(".sleeve"); if(b) select(+b.dataset.i, true); });
-
-  function renderQueue(){
-    const ids = (yt.getPlaylist && yt.getPlaylist()) || [], at = yt.getPlaylistIndex ? yt.getPlaylistIndex() : -1;
-    $("#queue").innerHTML = ids.map((v,k) => `<button class="qi ${k===at?"on":""}" type="button" data-k="${k}" style="background-image:url(https://i.ytimg.com/vi/${v}/mqdefault.jpg)" aria-label="Canción ${k+1}"><span>${k+1}</span></button>`).join("");
-  }
-  $("#queue").addEventListener("click", e => { const b = e.target.closest(".qi"); if(b && ready) yt.playVideoAt(+b.dataset.k); });
-  $("#bPlay").addEventListener("click", () => { if(!ready) return; if(loaded !== LISTS[cur][0]) return select(cur, true); playing ? yt.pauseVideo() : yt.playVideo(); });
+  queue.addEventListener("click", e => { const b = e.target.closest("button.qi"); if(b && ready) yt.playVideoAt(+b.dataset.k); });
+  $("#bPlay").addEventListener("click", () => { if(ready) playing ? yt.pauseVideo() : yt.playVideo(); });
   $("#bPrev").addEventListener("click", () => ready && yt.previousVideo());
   $("#bNext").addEventListener("click", () => ready && yt.nextVideo());
   $("#bar").addEventListener("click", e => { if(!ready) return; const r = e.currentTarget.getBoundingClientRect(), d = yt.getDuration(); if(d) yt.seekTo((e.clientX - r.left)/r.width*d, true); });
@@ -631,21 +717,22 @@ const LISTS = [
       $("#tCur").textContent = fmt(t); $("#tDur").textContent = fmt(d); $("#barFill").style.width = d ? (t/d*100)+"%" : "0%"; $("#bar").setAttribute("aria-valuenow", d ? Math.round(t/d*100) : 0); }
     requestAnimationFrame(tick);
   })();
-
   function offline(){
     if(ready) return;
     deck.classList.add("off");
-    $("#offMsg").textContent = "En tucancion.click tus canciones suenan aquí mismo. En esta vista previa se abren en YouTube.";
-    select(cur, false);
+    $("#offMsg").textContent = "En tucancion.click las canciones suenan aquí mismo. En esta vista previa se abren en YouTube.";
   }
   window.onYouTubeIframeAPIReady = () => {
     yt = new YT.Player("ytPlayer", {
       width:"100%", height:"100%",
       playerVars:{ listType:"playlist", list:LISTS[0][0], playsinline:1, rel:0, modestbranding:1, origin:location.origin },
       events:{
-        onReady:() => { ready = true; loaded = LISTS[0][0]; deck.classList.remove("off"); $("#screenOff").hidden = true; select(0, false); },
+        onReady:() => {
+          ready = true; deck.classList.remove("off"); $("#screenOff").hidden = true;
+          const p = pending || {i:0, play:false}; pending = null; select(p.i, p.play);
+        },
         onStateChange:e => {
-          playing = e.data === YT.PlayerState.PLAYING;
+          playing = e.data === YT.PlayerState.PLAYING; window.musicPlaying = playing;
           deck.classList.toggle("playing", playing);
           const d = yt.getVideoData && yt.getVideoData(); if(d && d.title) $("#nTitle").textContent = d.title;
           if(e.data === YT.PlayerState.PLAYING || e.data === YT.PlayerState.CUED) renderQueue();
@@ -656,48 +743,134 @@ const LISTS = [
   const tag = document.createElement("script"); tag.src = "https://www.youtube.com/iframe_api"; tag.onerror = offline; document.head.appendChild(tag);
   setTimeout(offline, 6000);
   select(0, false);
+  return { play: i => { select(i, true); $("#escucha").scrollIntoView({behavior: reduce ? "auto" : "smooth"}); } };
 })();
 
-/* ---- notas musicales que viajan con el scroll ---- */
+/* marcas que confiaron: al tocarlas suena la lista Comercial y Marca */
+$("#clientList").innerHTML = ["Mega Papelería Pichincha","Interviniendo con Fe","Sanados por Amor","Crianza Virtuosa","Orbi Sport","Lazos de Amor Mariano","FIAT","Christian Ortiz Barber Studio"].map(c => `<button type="button">${c}</button>`).join("");
+$("#clientList").addEventListener("click", e => { if(e.target.closest("button")) player.play(1); });
+
+/* ---- Notita: una nota musical que te acompaña ---- */
 (function(){
-  const c = $("#notesBg"), g = c.getContext("2d");
-  const mark = new Image(); mark.src = "assets/nota-corazon.webp";
-  const GL = ["♪","♫","♩","♬"], COL = ["#D6A8E6","#FF6FAE","#FFF3EC"];
-  const rnd = k => { const v = Math.sin(k*78.233)*43758.5453; return v - Math.floor(v); };
-  const N = innerWidth < 700 ? 22 : 38;
-  const notes = Array.from({length:N}, (_,k) => ({
-    x: rnd(k+1), y: rnd(k+11), d: .25 + rnd(k+21)*.75, ph: rnd(k+31)*6.28,
-    rot: (rnd(k+41)-.5)*.8, g: GL[k%4], col: COL[k%3], img: k%6 === 0
-  })).sort((a,b) => a.d - b.d);
-  let W = 0, H = 0, sy = scrollY, vel = 0, last = scrollY;
-  function size(){ const r = Math.min(devicePixelRatio||1, 2); W = innerWidth; H = innerHeight; c.width = W*r; c.height = H*r; g.setTransform(r,0,0,r,0,0); }
+  const box = $("#buddy"), c = $("#buddyC"), g = c.getContext("2d"), bubble = $("#bubble");
+  const MOODS = {
+    hola:     {eye:1, happy:0,  look:-.3, brow:.3, smile:1,  O:0, blush:.6, heart:0, wink:0, wave:1, bounce:.4, spark:0, say:"¡Hola! Soy Notita"},
+    curiosa:  {eye:1, happy:0,  look:-1,  brow:.8, smile:.5, O:0, blush:.4, heart:0, wink:0, wave:0, bounce:.15,spark:0, say:"¿Para qué momento es?"},
+    atenta:   {eye:1, happy:0,  look:-1,  brow:.2, smile:.6, O:0, blush:.4, heart:0, wink:0, wave:0, bounce:.1, spark:0, say:"¡Así de fácil!"},
+    baila:    {eye:0, happy:1,  look:0,   brow:.3, smile:1,  O:0, blush:.8, heart:0, wink:0, wave:.5,bounce:1,  spark:0, say:"¡Dale play!"},
+    guino:    {eye:1, happy:.8, look:-.6, brow:.4, smile:1,  O:0, blush:.8, heart:0, wink:1, wave:0, bounce:.3, spark:0, say:"Psst… la Única es la favorita"},
+    wow:      {eye:1, happy:0,  look:0,   brow:1,  smile:0,  O:1, blush:.5, heart:0, wink:0, wave:0, bounce:.2, spark:1, say:"¡Wow, tu marca con canción!"},
+    amor:     {eye:1, happy:0,  look:0,   brow:.5, smile:1,  O:0, blush:1,  heart:1, wink:0, wave:0, bounce:.5, spark:0, say:"¿Cuál es tu canción?"},
+    chao:     {eye:0, happy:1,  look:0,   brow:.4, smile:1,  O:0, blush:.7, heart:0, wink:0, wave:1, bounce:.3, spark:0, say:"¡Te espero en WhatsApp!"}
+  };
+  const KEYS = Object.keys(MOODS.hola).filter(k => k !== "say");
+  const secs = [["inicio","hola"],["momentos","curiosa"],["proceso","atenta"],["escucha","baila"],["planes","guino"],["marcas","wow"],["cierre","amor"],["pie","chao"]]
+    .map(([id,m]) => [document.getElementById(id), m]).filter(([el]) => el);
+  let st = {...MOODS.hola}, cur = "", W = 0, H = 0, vel = 0, lastY = scrollY, y = 0, tilt = 0, squash = 0, bubbleT = 0, hop = 0;
+  function size(){ const r = Math.min(devicePixelRatio||1, 2); W = c.clientWidth; H = c.clientHeight; c.width = W*r; c.height = H*r; g.setTransform(r,0,0,r,0,0); }
   size(); addEventListener("resize", size);
-  function draw(){
-    sy += (scrollY - sy)*.12;
-    vel += ((scrollY - last) - vel)*.1; last = scrollY;
-    g.clearRect(0,0,W,H);
-    const span = H + 240;
-    for(const n of notes){
-      const speed = .35 + n.d*1.1;                       // las más cercanas pasan más rápido
-      const y = (((n.y*span - sy*speed) % span) + span) % span - 120;
-      const x = n.x*W + Math.sin(sy*.0025*(.5 + n.d) + n.ph)*70*n.d;
-      const size = 16 + n.d*46, spin = n.rot + sy*.0015*(n.d - .5)*2 + vel*.004*n.d;
-      g.save(); g.globalAlpha = .12 + n.d*.5; g.translate(x, y); g.rotate(spin);
-      const s = 1 + Math.min(.35, Math.abs(vel)*.004*n.d); g.scale(s, s);
-      if(n.img && mark.naturalWidth){ g.drawImage(mark, -size*.9, -size*.7, size*1.8, size*1.4); }
-      else { g.fillStyle = n.col; g.font = `${size}px serif`; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(n.g, 0, 0); }
-      g.restore();
-    }
-    if(!reduce) requestAnimationFrame(draw);
+  function say(t){ bubble.textContent = t; bubble.classList.add("show"); clearTimeout(bubbleT); bubbleT = setTimeout(() => bubble.classList.remove("show"), 3200); }
+  function moodNow(){
+    const line = innerHeight*.5; let m = "hola";
+    for(const [el, mood] of secs){ const r = el.getBoundingClientRect(); if(r.top <= line) m = mood; }
+    if(innerHeight + scrollY >= document.documentElement.scrollHeight - 4) m = "chao";
+    return m;
   }
-  mark.onload = () => reduce && draw();
-  draw();
+  box.addEventListener("click", () => { hop = 1; say(["¡Cuéntanos tu historia!","¡Tu canción te espera!","♪ La la la ♪"][Math.random()*3|0]); });
+
+  function draw(t){
+    const S = W/150;   // dibujo en una caja de 150×190
+    g.clearRect(0,0,W,H); g.save(); g.scale(S,S);
+    const e = Math.max(st.bounce, window.musicPlaying ? .9 : 0);
+    const beat = Math.abs(Math.sin(t*Math.PI*1.6));
+    const by = -beat*10*e - Math.sin(hop*Math.PI)*28;
+    // sombra
+    g.fillStyle = "rgba(0,0,0,.35)"; g.beginPath(); g.ellipse(70,182,34*(1 - beat*e*.2),6,0,0,Math.PI*2); g.fill();
+    g.save();
+    g.translate(70, 150 + by); g.rotate(tilt + Math.sin(t*Math.PI*1.6)*.06*e); g.scale(1 + squash*.12, 1 - squash*.12); g.translate(-70, -150);
+    // plica y bandera
+    g.lineCap = "round"; g.strokeStyle = "#FFF3EC"; g.lineWidth = 9;
+    g.beginPath(); g.moveTo(104,138); g.lineTo(104,30); g.stroke();
+    const fl = Math.sin(t*4)*4*(.4 + e);
+    g.beginPath(); g.moveTo(104,30); g.bezierCurveTo(132,44 + fl,138,66,122,92 + fl); g.lineWidth = 8; g.stroke();
+    // brazos
+    const wave = st.wave, wa = Math.sin(t*9)*.6*wave;
+    g.strokeStyle = "#FFF3EC"; g.lineWidth = 5;
+    g.beginPath(); g.moveTo(34,150); g.quadraticCurveTo(14,140 - 26*wave, 18 + wa*14,118 - 22*wave); g.stroke();
+    g.fillStyle = "#FFF3EC"; g.beginPath(); g.arc(18 + wa*14,118 - 22*wave,5.5,0,Math.PI*2); g.fill();
+    g.beginPath(); g.moveTo(96,160); g.quadraticCurveTo(112,170,118,162); g.stroke();
+    g.beginPath(); g.arc(119,161,5,0,Math.PI*2); g.fill();
+    // cabeza (la cabeza de la nota)
+    g.save(); g.translate(68,150); g.rotate(-.32);
+    const hg = g.createLinearGradient(-44,-34,44,34); hg.addColorStop(0,"#FFB3D1"); hg.addColorStop(.55,"#FF6FAE"); hg.addColorStop(1,"#B85A9C");
+    g.beginPath(); g.ellipse(0,0,44,34,0,0,Math.PI*2); g.fillStyle = hg; g.fill(); g.lineWidth = 3; g.strokeStyle = "rgba(255,243,236,.9)"; g.stroke();
+    g.beginPath(); g.ellipse(-16,-16,12,6,-.5,0,Math.PI*2); g.fillStyle = "rgba(255,255,255,.45)"; g.fill();
+    g.rotate(.32);
+    // cara
+    const blink = (t % 3.6) < .13 ? 1 : 0;
+    for(const sd of [-1,1]){
+      const ex = sd*15, ey = -4;
+      g.strokeStyle = "#2A1530"; g.fillStyle = "#2A1530"; g.lineWidth = 3;
+      const bry = ey - 14 - 5*st.brow;
+      g.beginPath(); g.moveTo(ex-6,bry+2); g.quadraticCurveTo(ex,bry-3*st.brow,ex+6,bry+2); g.stroke();
+      let o = st.eye*(1 - blink); if(sd === 1) o *= 1 - st.wink;
+      if(st.heart > .5){
+        g.fillStyle = "#E0245E"; g.save(); g.translate(ex + st.look*2, ey + 1); const hs = 1 + .12*Math.sin(t*8); g.scale(hs,hs);
+        g.beginPath(); g.moveTo(0,4); g.bezierCurveTo(-9,-3,-5,-10,0,-5); g.bezierCurveTo(5,-10,9,-3,0,4); g.fill(); g.restore();
+      } else if(o > .5){
+        g.beginPath(); g.ellipse(ex + st.look*2.5, ey, 5, 6.5, 0, 0, Math.PI*2); g.fill();
+        g.fillStyle = "#fff"; g.beginPath(); g.arc(ex + st.look*2.5 + 1.8, ey - 2.4, 1.8, 0, Math.PI*2); g.fill();
+      } else {
+        g.beginPath(); g.moveTo(ex-6,ey+1); g.quadraticCurveTo(ex, ey + 1 - 9*Math.max(.3,st.happy), ex+6, ey+1); g.stroke();
+      }
+      g.fillStyle = `rgba(255,255,255,${.25 + .35*st.blush})`; g.beginPath(); g.ellipse(sd*25,8,6,3.5,0,0,Math.PI*2); g.fill();
+    }
+    g.fillStyle = "#2A1530"; g.strokeStyle = "#2A1530"; g.lineWidth = 3;
+    if(st.O > .5){ g.beginPath(); g.ellipse(0,13,5,6.5,0,0,Math.PI*2); g.fill(); }
+    else {
+      const mw = 6 + 5*st.smile, open = st.smile > .8 ? 1 : 0;
+      g.beginPath(); g.moveTo(-mw,10); g.quadraticCurveTo(0,10 + 9*st.smile + 3*open,mw,10);
+      if(open){ g.closePath(); g.fill(); g.fillStyle = "#FF8FB8"; g.beginPath(); g.ellipse(0,15,3.5,2,0,0,Math.PI*2); g.fill(); } else g.stroke();
+    }
+    g.restore();
+    g.restore();
+    // destellos de "¡wow!"
+    if(st.spark > .3){
+      g.strokeStyle = `rgba(255,243,236,${st.spark*(.5 + .5*Math.sin(t*6))})`; g.lineWidth = 3;
+      for(const [x,yy,a] of [[20,96,-.6],[30,78,-.9],[120,110,.5]]){ g.save(); g.translate(x,yy + by); g.rotate(a); g.beginPath(); g.moveTo(0,-7); g.lineTo(0,7); g.moveTo(-7,0); g.lineTo(7,0); g.stroke(); g.restore(); }
+    }
+    g.restore();
+  }
+  let last = 0;
+  function frame(ts){
+    const t = ts/1000, dt = Math.min(.05, last ? t - last : 0); last = t;
+    const m = moodNow();
+    if(m !== cur){ cur = m; say(MOODS[m].say); }
+    const f = 1 - Math.pow(.08, dt);
+    for(const k of KEYS) st[k] += (MOODS[cur][k] - st[k])*f;
+    vel += ((scrollY - lastY) - vel)*.15; lastY = scrollY;
+    tilt += (Math.max(-.35, Math.min(.35, -vel*.012)) - tilt)*.12;
+    squash += (Math.min(1, Math.abs(vel)*.03) - squash)*.15;
+    const prog = scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    y += ((Math.sin(prog*Math.PI*6)*18) - y)*.08;
+    hop = Math.max(0, hop - dt*1.8);
+    box.style.transform = `translateY(${y}px)`;
+    draw(t);
+    if(!reduce) requestAnimationFrame(frame);
+  }
+  if(reduce){ cur = moodNow(); st = {...MOODS[cur]}; draw(0); addEventListener("scroll", () => { const m = moodNow(); if(m !== cur){ cur = m; st = {...MOODS[m]}; draw(0); } }, {passive:true}); }
+  else requestAnimationFrame(frame);
 })();
 
 /* ---- luz que sigue al cursor en tarjetas y planes ---- */
-document.querySelectorAll(".tile,.plan").forEach(el => el.addEventListener("pointermove", e => {
-  const r = el.getBoundingClientRect(); el.style.setProperty("--mx", (e.clientX - r.left) + "px"); el.style.setProperty("--my", (e.clientY - r.top) + "px");
-}));
+document.querySelectorAll(".tile,.plan").forEach(el => {
+  el.addEventListener("pointermove", e => {
+    const r = el.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+    el.style.setProperty("--mx", x + "px"); el.style.setProperty("--my", y + "px");
+    if(el.classList.contains("tile") && !reduce){ el.style.setProperty("--ry", ((x/r.width - .5)*10).toFixed(2) + "deg"); el.style.setProperty("--rx", ((.5 - y/r.height)*8).toFixed(2) + "deg"); }
+  });
+  el.addEventListener("pointerleave", () => { el.style.setProperty("--rx","0deg"); el.style.setProperty("--ry","0deg"); });
+});
 
 /* ---- botones magnéticos y cursor ---- */
 if(matchMedia("(pointer:fine)").matches && !reduce){
